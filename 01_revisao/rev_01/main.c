@@ -1,34 +1,63 @@
 #include <stdio.h>
+#include <math.h>
 
 #define PI 3.1415
 
-typedef struct {
+typedef struct
+{
     float x;
     float y;
-    float radius
+    float radius;
 } tCirc;
 
 /**
-* Lê da entrada padrão o centro e o raio da circunferência
-*
-* @param x Informa a coordenada X da circunferência
-* @param y Informa a coordenada Y da circunferência
-* @param radius Informa o raio da circunferência
-*/
+ * Lê da entrada padrão o centro e o raio da circunferência
+ *
+ * @return Retorna o objeto do tipo tCirc inicializado
+ */
 
-void ReadCircInfo(tCirc circ);
+tCirc ReadCircInfo();
+
+/**
+ * Calcula a distância em x entre dois pontos
+ *
+ * @param target Recebe o alvo
+ * @param bullet Recebe o projétil
+ * @return Retorna a distância entre os pontos
+ */
+
+float CalcDistance(tCirc target, tCirc bullet);
 
 int main()
 {
-    tCirc target;
-    tCirc bullet;
+    tCirc target = ReadCircInfo();
+    tCirc bullet = ReadCircInfo();
 
-    ReadCircInfo(target);
-    ReadCircInfo(bullet);
+    float distance = CalcDistance(target, bullet);
+
+    if (distance > target.radius + bullet.radius)
+        printf("ERROU");
+    else
+        printf("ACERTOU");
 
     return 0;
 }
 
-void ReadCircInfo(tCirc circ) {
-    scanf("%f %f %f", &circ.x, &circ.y, &circ.radius);
+tCirc ReadCircInfo()
+{
+    tCirc circ;
+
+    scanf("%f %f %f\n", &circ.x, &circ.y, &circ.radius);
+
+    return circ;
+}
+
+float CalcDistance(tCirc target, tCirc bullet)
+{
+    float delta_x = target.x - bullet.x;
+    float delta_y = target.y - bullet.y;
+
+    float distance = sqrt(delta_x * delta_x + delta_y * delta_y);
+
+    return distance;
 }
