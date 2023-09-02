@@ -54,3 +54,6 @@ dkms.conf
 */*/outprog
 */*/prog
 */*/makediff
+*/*/*.sh
+*/*/Resultados
+*/*/log.txt
