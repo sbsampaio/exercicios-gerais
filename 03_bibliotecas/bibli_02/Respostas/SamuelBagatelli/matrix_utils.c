@@ -23,10 +23,14 @@ void matrix_print(int rows, int cols, int matrix[rows][cols])
         printf("|");
         for (j = 0; j < cols; j++)
         {
-            printf("%d ", matrix[i][j]);
+            printf("%d", matrix[i][j]);
+            if (j != cols - 1)
+                printf(" ");
         }
         printf("|\n");
     }
+
+    printf("\n");
 }
 
 int possible_matrix_sum(int rows1, int cols1, int rows2, int cols2)
@@ -46,12 +50,6 @@ int possible_matrix_multiply(int cols1, int rows2)
 
 void matrix_add(int rows1, int cols1, int matrix1[rows1][cols1], int rows2, int cols2, int matrix2[rows2][cols2], int result[rows1][cols1])
 {
-    if (!possible_matrix_sum(rows1, cols1, rows2, cols2))
-    {
-        printf("Erro: as dimensoes da matriz nao correspondem\n");
-        return;
-    }
-
     int i, j;
 
     for (i = 0; i < rows1; i++)
@@ -65,12 +63,6 @@ void matrix_add(int rows1, int cols1, int matrix1[rows1][cols1], int rows2, int 
 
 void matrix_sub(int rows1, int cols1, int matrix1[rows1][cols1], int rows2, int cols2, int matrix2[rows2][cols2], int result[rows1][cols1])
 {
-    if (!possible_matrix_sub(rows1, cols1, rows2, cols2))
-    {
-        printf("Erro: as dimensoes da matriz nao correspondem\n");
-        return;
-    }
-
     int i, j;
 
     for (i = 0; i < rows1; i++)
@@ -84,11 +76,45 @@ void matrix_sub(int rows1, int cols1, int matrix1[rows1][cols1], int rows2, int 
 
 void matrix_multiply(int rows1, int cols1, int matrix1[rows1][cols1], int rows2, int cols2, int matrix2[rows2][cols2], int result[rows1][cols2])
 {
-    if (!possible_matrix_multiply(cols1, rows2))
-    {
-        printf("Erro: o numero de colunas da primeira matriz eh diferente do numero de linhas da segunda matriz\n");
-        return;
-    }
+    int i, j, k;
+    int sum;
 
+    for (i = 0; i < rows1; i++)
+    {
+        for (j = 0; j < cols2; j++)
+        {
+            sum = 0;
+            for (k = 0; k < cols1; k++)
+            {
+                sum += matrix1[i][k] * matrix2[k][j];
+            }
+            result[i][j] = sum;
+        }
+    }
+}
+
+void transpose_matrix(int rows, int cols, int matrix[rows][cols], int result[cols][rows])
+{
     int i, j;
+
+    for (i = 0; i < rows; i++)
+    {
+        for (j = 0; j < cols; j++)
+        {
+            result[j][i] = matrix[i][j];
+        }
+    }
+}
+
+void scalar_multiply(int rows, int cols, int matrix[rows][cols], int scalar)
+{
+    int i, j;
+
+    for (i = 0; i < rows; i++)
+    {
+        for (j = 0; j < cols; j++)
+        {
+            matrix[i][j] = matrix[i][j] * scalar;
+        }
+    }
 }
