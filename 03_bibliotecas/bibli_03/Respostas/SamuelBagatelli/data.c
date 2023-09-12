@@ -99,8 +99,13 @@ int verificaBissexto(int ano)
 
 int numeroDiasMes(int mes, int ano)
 {
-    if (verificaBissexto(ano) && mes == 2)
-        return 29;
+    if (mes == 2)
+    {
+        if (verificaBissexto(ano))
+            return 29;
+
+        return 28;
+    }
 
     if (mes == 4 || mes == 6 || mes == 9 || mes == 11)
         return 30;
@@ -132,9 +137,53 @@ int comparaData(int dia1, int mes1, int ano1, int dia2, int mes2, int ano2)
         return -1;
 }
 
-int calculaDiferencaDias(int dia1, int mes1, int ano1, int dia2, int mes2, int ano2)
+int calculaDiasAteMes(int mes, int ano)
 {
+    if (mes == 1)
+        return 31;
+
+    if (mes == 2)
+    {
+        if (verificaBissexto(ano))
+        {
+            return 29 + calculaDiasAteMes(--mes, ano);
+        }
+
+        return 28 + calculaDiasAteMes(--mes, ano);
+    }
+
+    if (mes == 4 || mes == 6 || mes == 9 || mes == 11)
+        return 30 + calculaDiasAteMes(--mes, ano);
+
+    return 31 + calculaDiasAteMes(--mes, ano);
+}
+
+int calculaDiferencaDias(int dia1, int mes1, int ano1, int dia2, int mes2, int ano2)
+{   
     int difAno = ano1 - ano2;
-    int difMes = mes1 - mes2;
     int difDia = dia1 - dia2;
+    int difMes = calculaDiasAteMes(mes1, ano1) - calculaDiasAteMes(mes2, ano2);
+
+    difDia = difDia > 0 ? difDia : difDia * -1;
+
+    difMes = difMes > 0 ? difMes : difMes * -1;
+
+    difAno = difAno > 0 ? difAno : difAno * -1;
+
+    if (difAno >= 4)
+    {
+        int qntAnosBissextos = difAno / 4;
+        difAno = (difAno - qntAnosBissextos) * 365 + (qntAnosBissextos) * 366;
+    }
+    else
+    {
+        if (verificaBissexto(ano1) || verificaBissexto(ano2))
+            difAno = (difAno - 1) * 365 + 366;
+        else
+            difAno = difAno * 365;
+    }
+
+    int difTotal = difDia + difMes + difAno;
+
+    return difTotal;
 }
