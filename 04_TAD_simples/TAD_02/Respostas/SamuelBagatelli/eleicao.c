@@ -4,8 +4,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MAX_CANDIDATOS 6
-
 tEleicao InicializaEleicao()
 {
     int totalCandidatos;
@@ -30,7 +28,7 @@ tEleicao InicializaEleicao()
         tCandidato candidato = LeCandidato();
 
         char cargo = ObtemCargo(candidato);
-        
+
         if (cargo == 'P')
         {
             eleicao.presidentes[eleicao.totalPresidentes] = candidato;
@@ -56,16 +54,71 @@ tEleicao RealizaEleicao(tEleicao eleicao)
         eleicao.totalEleitores++;
 
         int votoP = ObtemVotoPresidente(eleitor);
+
+        if (votoP == 0)
+            eleicao.votosBrancosPresidente++;
+
         int votoG = ObtemVotoGovernador(eleitor);
 
-        int i;
+        if (votoG == 0)
+            eleicao.votosBrancosGovernador++;
+
+        int i, contP = 0, contG = 0;
         for (i = 0; i < MAX_CANDIDATOS_POR_CARGO; i++)
         {
             if (VerificaIdCandidato(eleicao.presidentes[i], votoP))
                 eleicao.presidentes[i] = IncrementaVotoCandidato(eleicao.presidentes[i]);
+            else
+                contP++;
 
             if (VerificaIdCandidato(eleicao.governadores[i], votoG))
                 eleicao.governadores[i] = IncrementaVotoCandidato(eleicao.governadores[i]);
+            else
+                contG++;
+        }
+
+        if (contP >= 3)
+            eleicao.votosNulosPresidente++;
+
+        if (contG >= 3)
+            eleicao.votosNulosGovernador++;
+    }
+
+    return eleicao;
+}
+
+void TrocaPosicao(int* xp, int* yp)
+{
+    int temp = *xp;
+    *xp = *yp;
+    *yp = temp;
+}
+
+void ImprimeResultadoEleicao(tEleicao eleicao)
+{
+    if (eleicao.totalEleitores > MAX_ELEITORES)
+    {
+        printf("ELEICAO ANULADA");
+        return;
+    }
+
+    if (eleicao.totalGovernadores > MAX_CANDIDATOS_POR_CARGO || eleicao.totalPresidentes > MAX_CANDIDATOS_POR_CARGO)
+    {
+        printf("ELEICAO ANULADA");
+        return;
+    }
+
+    int i, j;
+
+    for (i = 0; i < eleicao.totalEleitores - 1; i++)
+    {
+        for (j = 0; j < eleicao.totalEleitores - i - 1; j++)
+        {
+            if (EhMesmoEleitor(eleicao.eleitores[j], eleicao.eleitores[j + 1]))
+            {
+                printf("ELEICAO ANULADA");
+                return;
+            }
         }
     }
 }
