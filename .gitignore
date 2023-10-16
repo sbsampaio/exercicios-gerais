@@ -57,3 +57,8 @@ dkms.conf
 */*/*.sh
 */*/Resultados
 */*/log.txt
+
+# Student Output for 06_aloc...
+*/*/*/*.sh
+*/*/*/Resultados
+*/*/*/log.txt
