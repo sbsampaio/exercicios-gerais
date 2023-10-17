@@ -4,7 +4,7 @@
 
 int **CriaMatriz(int linhas, int colunas)
 {
-    int(*mat)[colunas] = calloc(linhas * colunas, sizeof(int));
+    int **mat = (int **)malloc(linhas * sizeof(int*));
 
     if (mat == NULL)
     {
@@ -12,7 +12,17 @@ int **CriaMatriz(int linhas, int colunas)
         exit(1);
     }
 
-    return (int **)mat;
+    for (int i = 0; i < linhas; i++)
+    {
+        mat[i] = (int *)malloc(colunas * sizeof(int));
+        if (mat[i] == NULL)
+        {
+            printf("Problema na alocacao!\n");
+            exit(1);
+        }
+    }
+
+    return mat;
 }
 
 void LiberaMatriz(int **matriz, int linhas)
@@ -27,14 +37,13 @@ void LiberaMatriz(int **matriz, int linhas)
 
 void LeMatriz(int **matriz, int linhas, int colunas)
 {
-    int i, j, aux;
+    int i, j;
 
     for (i = 0; i < linhas; i++)
     {
         for (j = 0; j < colunas; j++)
         {
-            scanf("%d", &aux);
-            matriz[i][j] = aux;
+            scanf("%d", &matriz[i][j]);
         }
     }
 }
@@ -43,11 +52,11 @@ void ImprimeMatrizTransposta(int **matriz, int linhas, int colunas)
 {
     int i, j;
 
-    for (i = 0; i < linhas; i++)
+    for (i = 0; i < colunas; i++)
     {
-        for (j = 0; j < colunas; j++)
+        for (j = 0; j < linhas; j++)
         {
-            printf("%d ", matriz[j][i]);
+            printf("%d ", matriz[i][j]);
         }
         printf("\n");
     }
