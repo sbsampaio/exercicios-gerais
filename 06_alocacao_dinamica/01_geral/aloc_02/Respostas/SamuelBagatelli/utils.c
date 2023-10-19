@@ -4,7 +4,7 @@
 
 int **CriaMatriz(int linhas, int colunas)
 {
-    int **mat = (int **)malloc(linhas * sizeof(int*));
+    int **mat = (int **)malloc(linhas * sizeof(int *));
 
     if (mat == NULL)
     {
@@ -56,7 +56,7 @@ void ImprimeMatrizTransposta(int **matriz, int linhas, int colunas)
     {
         for (j = 0; j < linhas; j++)
         {
-            printf("%d ", matriz[i][j]);
+            printf("%d ", matriz[j][i]);
         }
         printf("\n");
     }
